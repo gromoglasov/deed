@@ -1,5 +1,33 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Task } from '../task-class';
+import { ActivatedRoute } from '@angular/router';
+
+import { Location } from '@angular/common';
+import { Apollo } from "apollo-angular";
+import gql from "graphql-tag";
+import { Subscription } from "apollo-client/util/Observable";
+
+
+function changeTaskStatus(id) {
+  return gql`
+    mutation {
+      updateTask(
+        _id: "${id}"
+        input: {
+          status: "completed"
+          userCompleted: "isadora"
+          prove: {
+            image: "none"
+            text: "none"
+          }
+        }
+      ) {
+        _id
+      }
+    }
+  `
+} ;
+
 
 @Component({
   selector: "app-task",
@@ -14,7 +42,13 @@ export class TaskComponent implements OnInit {
   content: string;
 
 
-  constructor() {}
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private apollo: Apollo
+  ) {
+    this.task = this.route.snapshot.params.task;
+  }
 
 
   addPoints () {
@@ -22,7 +56,7 @@ export class TaskComponent implements OnInit {
     this.group = this.task.group;
     console.log(this._id);
     console.log(this.group);
-    
+
 
     this.points++
     console.log(this.task._id)
@@ -30,8 +64,13 @@ export class TaskComponent implements OnInit {
 
   status:boolean = false;
 
-  showContent(){
+
+
+  completeTask(){
     this.status = !this.status;
+    this.apollo.mutate<any>({ mutation: changeTaskStatus(this.task._id) }).subscribe();
+    window.location.reload();
+
     console.log("clicked")
   }
 
@@ -39,6 +78,7 @@ export class TaskComponent implements OnInit {
   ngOnInit() {
     this.points =  this.task.points;
     //console.log(this.task);
-    
+
   }
+
 }

@@ -51,11 +51,11 @@ function getqueryimage(group) {
     `;
 }
 
-function createTask(title, content, points) {
+function createTask(title, content, points, group) {
   return gql`
     mutation {
       createTask(
-        group: "Codeworks"
+        group: "${group}"
         title: "${title}"
         content: "${content}"
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYj1pL1Z0wPCagDhG93HyaXFClCA-d5jwuRDspPoNMNRcvfdFn"
@@ -95,11 +95,13 @@ export class CommunityComponent implements OnInit {
   // }
 
   showForm() {
+    if (this.status2) this.status2 = !this.status2
     this.status = !this.status;
     console.log('work', this.status);
   }
 
   showForm2() {
+    if (this.status) this.status = !this.status
     this.status2 = !this.status2;
     console.log('work2',this.status2);
 
@@ -107,7 +109,7 @@ export class CommunityComponent implements OnInit {
 
   submit(title, content, points) {
     this.status = !this.status;
-    this.apollo.mutate<any>({ mutation: createTask(title, content, points) }).subscribe();
+    this.apollo.mutate<any>({ mutation: createTask(title, content, points, this.group) }).subscribe();
     window.location.reload();
   }
 
@@ -116,7 +118,13 @@ export class CommunityComponent implements OnInit {
       .watchQuery<any>({ query: getquery(this.group) })
       .valueChanges.subscribe(({ data, loading }) => {
         this.loading = loading;
-        this.tasks = data.allTasks;
+        let notYetCompleted = [];
+        console.log('before',data.allTasks);
+        console.log('after',notYetCompleted);
+        for (let i = 0, k = 0; i < data.allTasks.length - k; i++) {
+          if(data.allTasks[i].status !== "completed") notYetCompleted.push(data.allTasks[i]);
+        }
+        this.tasks = notYetCompleted;
       });
   }
 
