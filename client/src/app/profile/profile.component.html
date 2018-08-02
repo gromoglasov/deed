@@ -37,10 +37,10 @@
       <input #type type="text" name="" value="">
       <p>Karma</p>
       <input #karma class="karma" type="number" name="" value="">
-      <button type="button" name="button" (click)="submit()">SUBMIT</button>
+      <button type="button" name="button" (click)="createGroup(name.value, type.value, karma.value)">SUBMIT</button>
     </div>
   </div>
 </div>
   <app-mini-community *ngFor="let karma of user?.karmas" [karmas]='karma'></app-mini-community>
-  </ul> 
+  </ul>
 </div>

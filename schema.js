@@ -19,6 +19,7 @@ type Group {
   name: String!
   type: String!
   users: [String!]!
+  initKarma: Int!
   delegates: [String!]!
   tasks: [String]
   messages: [Message]
@@ -111,6 +112,7 @@ type Mutation {
     name: String!
     type: String!
     users: [String]
+    initKarma: Int!
     delegates: [String]
     icon: String
     coverPhoto: String

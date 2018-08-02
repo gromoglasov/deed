@@ -10,6 +10,23 @@ import { Apollo } from "apollo-angular";
 import gql from 'graphql-tag';
 import { Subscription } from 'apollo-client/util/Observable';
 
+function createNewGroup (group, type, initKarma) {
+  return gql`
+    mutation {
+      createGroup (
+        name: "${group}"
+        type: "${type}"
+        initKarma: ${initKarma}
+        icon: "https://www.appian.com/wp-content/uploads/2017/04/careers-icon-community.png"
+      ) {
+        _id
+      }
+    }
+  `;
+
+}
+
+
 const queryies = gql`
   {
     allUsers(userName: "isadorabk") {
@@ -27,51 +44,6 @@ const queryies = gql`
     }
   }
 `;
-
-
-
-const createGroup = gql`
-  mutation {
-    createGroup (
-      name: "Poblenou"
-      type: "Neighbourhood"
-      icon: "https://www.appian.com/wp-content/uploads/2017/04/careers-icon-community.png"
-    ) {
-      _id
-    }
-  }
-`;
-
-const updateUser = gql`
-  mutation {
-    updateUserGroup(
-      userName: "isadorabk"
-      groups: "Poblenou"
-    ) {
-      _id
-    }
-  }
-`;
-
-const updateKarma = gql`
-  mutation {
-    updateKarma(
-      userName: "isadorabk"
-      input: {
-        group: "Poblenou"
-        karmaPoint: 50
-        image: "https://www.appian.com/wp-content/uploads/2017/04/careers-icon-community.png"
-      }
-    ) {
-      _id
-    }
-  }
-`;
-
-
-
-
-
 
 @Component({
   selector: 'app-profile',
@@ -91,14 +63,47 @@ export class ProfileComponent implements OnInit {
     this.status = !this.status;
   }
 
-  submit() {
+  updateUserGroups (user, group) {
+    return gql`
+      mutation {
+        updateUserGroup(
+          userName: "${user}"
+          groups: "${group}"
+        ) {
+          _id
+        }
+      }
+    `;
+  }
+
+updateKarma(user, group, karma) {
+  return gql`
+      mutation {
+        updateKarma(
+          userName: "${user}"
+          input: {
+            group: "${group}"
+            karmaPoint: ${karma}
+            image: "https://www.appian.com/wp-content/uploads/2017/04/careers-icon-community.png"
+          }
+        ) {
+          _id
+        }
+      }
+    `;
+}
+
+
+
+
+  createGroup(group, type, initKarma) {
     this.status = !this.status;
-    this.apollo.mutate<any>({ mutation: createGroup })
+    this.apollo.mutate<any>({ mutation: createNewGroup(group, type, initKarma) })
       .subscribe()
-    this.apollo.mutate<any>({ mutation: updateUser })
-      .subscribe()
-    this.apollo.mutate<any>({ mutation: updateKarma })
-      .subscribe()
+    this.apollo.mutate<any>({ mutation: this.updateUserGroups(this.user.userName, group) })
+        .subscribe()
+    this.apollo.mutate<any>({ mutation: this.updateKarma(this.user.userName, group, initKarma) })
+        .subscribe()
     window.location.reload();
   }
 

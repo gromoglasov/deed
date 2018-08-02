@@ -104,7 +104,6 @@ export class CommunityComponent implements OnInit {
     if (this.status) this.status = !this.status
     this.status2 = !this.status2;
     console.log('work2',this.status2);
-
   }
 
   submit(title, content, points) {

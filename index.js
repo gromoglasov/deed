@@ -36,6 +36,7 @@ const Group = mongoose.model('Group', {
   users: [String],
   delegates: [String],
   tasks: [String],
+  initKarma: Number,
   messages: [{
     author: String,
     text: String,
