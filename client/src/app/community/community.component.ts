@@ -14,10 +14,9 @@ import { Subscription } from "apollo-client/util/Observable";
 
 
 function getquery (name){
-  if (name === "Codeworks"){
     return gql`
     {
-      allTasks(group: "Codeworks") {
+      allTasks(group: "${name}") {
         _id
         group
         title
@@ -33,52 +32,12 @@ function getquery (name){
       }
     }
   `;
-  } else if (name === "Our House") {
-      return gql`
-    {
-      allTasks(group: "Our House") {
-        _id
-        group
-        title
-        content
-        image
-        status
-        points
-        userCompleted
-        prove {
-          text
-          image
-        }
-      }
-    }
-  `;
-  } else if (name === "Poblenou") {
-    return gql`
-    {
-      allTasks(group: "Poblenou") {
-        _id
-        group
-        title
-        content
-        image
-        status
-        points
-        userCompleted
-        prove {
-          text
-          image
-        }
-      }
-    }
-  `;
-  }
 }
 
 function getqueryimage(group) {
-  if (group === "Codeworks") {
     return gql`
       {
-        allGroups(name: "Codeworks") {
+        allGroups(name: "${group}") {
           _id
           name
           type
@@ -90,53 +49,24 @@ function getqueryimage(group) {
         }
       }
     `;
-  } else if (group === "Our House") {
-    return gql`
-    {
-      allGroups(name: "Our House") {
-        _id
-        name
-        type
-        users
-        delegates
-        tasks
-        icon
-        coverPhoto
-      }
-    }
-  `;
-  } else if (group === "Poblenou") {
-    return gql`
-    {
-      allGroups(name: "Poblenou") {
-        _id
-        name
-        type
-        users
-        delegates
-        tasks
-        icon
-        coverPhoto
-      }
-    }
-  `;
-  }
 }
 
-const createTask = gql`
-  mutation {
-    createTask(
-      group: "Codeworks"
-      title: "Washing the dishes"
-      content: "do the dishes!"
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYj1pL1Z0wPCagDhG93HyaXFClCA-d5jwuRDspPoNMNRcvfdFn"
-      status: "To do"
-      points: 15
-    ) {
-      _id
+function createTask(title, content, points) {
+  return gql`
+    mutation {
+      createTask(
+        group: "Codeworks"
+        title: "${title}"
+        content: "${content}"
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYj1pL1Z0wPCagDhG93HyaXFClCA-d5jwuRDspPoNMNRcvfdFn"
+        status: "To do"
+        points: ${points}
+      ) {
+        _id
+      }
     }
-  }
-`;
+  `
+} ;
 
 
 @Component({
@@ -172,12 +102,12 @@ export class CommunityComponent implements OnInit {
   showForm2() {
     this.status2 = !this.status2;
     console.log('work2',this.status2);
-    
+
   }
 
-  submit() {
+  submit(title, content, points) {
     this.status = !this.status;
-    this.apollo.mutate<any>({ mutation: createTask }).subscribe();
+    this.apollo.mutate<any>({ mutation: createTask(title, content, points) }).subscribe();
     window.location.reload();
   }
 
