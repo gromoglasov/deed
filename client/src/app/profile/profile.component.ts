@@ -26,7 +26,6 @@ function createNewGroup (group, type, initKarma) {
 
 }
 
-
 const queryies = gql`
   {
     allUsers(userName: "isadorabk") {
@@ -115,7 +114,6 @@ updateKarma(user, group, karma) {
   // fetch the user data and display it
 
   private querySubscription: Subscription;
-
 
   constructor(
     private deedService: DeedService,

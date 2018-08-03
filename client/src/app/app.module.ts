@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { TaskComponent } from './task/task.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { MiniCommunityComponent } from './mini-community/mini-community.component';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MiniCommunityComponent } from './mini-community/mini-community.componen
     CommunityComponent,
     ProfileComponent,
     TaskComponent,
-    MiniCommunityComponent
+    MiniCommunityComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

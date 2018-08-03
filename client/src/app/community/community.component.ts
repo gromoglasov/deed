@@ -109,7 +109,8 @@ export class CommunityComponent implements OnInit {
   submit(title, content, points) {
     this.status = !this.status;
     this.apollo.mutate<any>({ mutation: createTask(title, content, points, this.group) }).subscribe();
-    window.location.reload();
+
+    this.getData();
   }
 
   getData() {

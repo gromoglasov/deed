@@ -186,6 +186,7 @@
   /* background: coral; */
   padding: 20px 20px;
   overflow: scroll;
+  /* overflow: auto; */
 }
 
 .task {
@@ -373,11 +374,3 @@
 *:focus {
   outline: none;
 }
-
-
-
-
-
-
-
-

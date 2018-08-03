@@ -1,7 +1,7 @@
 
 .task {
   float: left;
-  height: 220px;
+  min-height: 150px;
   width: 100%;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16);
   background: white;
@@ -93,6 +93,7 @@ text-justify: center;
   border-radius: 20px;
   height: 30px;
   margin-top: 20px;
+  margin-bottom: 20px;
   background: none;
   color: rgba(248, 148, 6, 1);
   cursor: pointer;

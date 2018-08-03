@@ -124,7 +124,8 @@ module.exports = {
     },
 
     updateTaskPoints: async (parent, args, {Task}) => {
-      await Task.update({id: args.id}, {$set: {points: args.input.points}})
+      console.log(args._id);
+      await Task.update({_id: args._id}, {$set: {points: args.input.points}})
     },
 
     addPrize: async (parent, args, {Group}) => {

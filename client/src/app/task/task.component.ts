@@ -28,6 +28,23 @@ function changeTaskStatus(id) {
   `
 } ;
 
+function addKarma(id, points) {
+
+  return gql`
+    mutation {
+      updateTaskPoints(
+        _id: "${id}"
+        input: {
+          points: ${points}
+        }
+      ) {
+        _id
+      }
+    }
+  `
+
+}
+
 
 @Component({
   selector: "app-task",
@@ -51,15 +68,9 @@ export class TaskComponent implements OnInit {
   }
 
 
-  addPoints () {
-    this._id = this.task._id;
-    this.group = this.task.group;
-    console.log(this._id);
-    console.log(this.group);
-
-
-    this.points++
-    console.log(this.task._id)
+  addPoints (id, points) {
+    this.points = this.points + 1;
+    this.apollo.mutate<any>({ mutation: addKarma(this._id, this.points) }).subscribe();
   }
 
   status:boolean = false;
@@ -76,9 +87,9 @@ export class TaskComponent implements OnInit {
 
 
   ngOnInit() {
-    this.points =  this.task.points;
-    //console.log(this.task);
-
+    this.points =  Object.assign(this.task.points);
+    this._id = Object.assign(this.task._id);
+    this.group = Object.assign(this.task.group);
   }
 
 }
